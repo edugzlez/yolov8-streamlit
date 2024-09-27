@@ -1,11 +1,11 @@
 import streamlit as st
-from ultralytics import YOLO
 from PIL import Image
-import time
+from ultralytics import YOLO
 
 st.set_page_config(page_title="Object Detection with YOLO", page_icon="🚀")
 
 github_icon = Image.open("github-mark.png")
+
 
 def main():
     model = YOLO("yolov8n.pt")
@@ -16,17 +16,22 @@ def main():
     col1, col2 = st.columns(2)
 
     with col1:
-        det_threshold = st.slider("Score threshold", min_value=0.0, max_value=1.0, value=0.25)
+        det_threshold = st.slider(
+            "Score threshold", min_value=0.0, max_value=1.0, value=0.25
+        )
 
     with col2:
-        iou_threshold = st.slider("IoU threshold", min_value=0.0, max_value=1.0, value=0.5)
+        iou_threshold = st.slider(
+            "IoU threshold", min_value=0.0, max_value=1.0, value=0.5
+        )
 
     if image is not None:
         real_image = Image.open(image)
 
-        container = st.container()
         with st.spinner("Waiting for inference..."):
-            result = model(real_image, verbose=False, conf=det_threshold, iou=iou_threshold)[0]
+            result = model(
+                real_image, verbose=False, conf=det_threshold, iou=iou_threshold
+            )[0]
 
         st.image(result.plot()[:, :, ::-1])
 
@@ -38,6 +43,7 @@ def main():
     </footer>
     """
     )
+
 
 if __name__ == "__main__":
     main()
